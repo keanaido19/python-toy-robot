@@ -19,6 +19,8 @@ def create_square_obstacle(
     obstacles = []
     for _ in range(random.randint(0, amount)):
         random_x, random_y = get_random_coordinates(llx, lly, urx, ury, size)
+        if random_x == random_y == 0:
+            continue
         square_obstacle = [(random_x, random_y)]
         for i in range(1, size + 1):
             square_obstacle.append((random_x, random_y + i))
@@ -47,12 +49,15 @@ def get_random_coordinates(
     :param int size: Size of the obstacle
     :return: x coordinate and y coordinate
     """
-    random_x = get_random_x_coordinate(llx, urx, size)
-    random_y = get_random_y_coordinate(lly, ury, size)
-    while is_invalid_coordinates(random_x, random_y, size):
+    counter = 0
+    while True:
+        if counter == 10:
+            return 0, 0
         random_x = get_random_x_coordinate(llx, urx, size)
         random_y = get_random_y_coordinate(lly, ury, size)
-    return random_x, random_y
+        if not is_invalid_coordinates(random_x, random_y, size):
+            return random_x, random_y
+        counter += 1
 
 
 def is_invalid_coordinates(x_coordinate: int, y_coordinate: int, size: int) \
@@ -66,6 +71,8 @@ def is_invalid_coordinates(x_coordinate: int, y_coordinate: int, size: int) \
     """
     global obstacles
     boolean_values = []
+    if check_coordinates_overlap_origin(x_coordinate, y_coordinate, size):
+        return True
     if obstacles:
         for obstacle in obstacles:
             boolean_values.append(
@@ -100,6 +107,42 @@ def check_y_coordinate_overlap(y_coordinate: int,
     return obstacle[0][1] - size <= y_coordinate <= obstacle[0][1] + size
 
 
+def check_coordinates_overlap_origin(x_coordinate: int, y_coordinate: int,
+                                     size: int) -> bool:
+    """
+    Checks if the x and y coordinate of the obstacle will overlap with the
+    origin point
+    :param int x_coordinate: x coordinate
+    :param int y_coordinate: y coordinate
+    :param int size: Size of the obstacle
+    :return: Boolean value
+    """
+    return check_x_coordinate_overlap_origin(x_coordinate, size) and \
+        check_y_coordinate_overlap_origin(y_coordinate, size)
+
+
+def check_x_coordinate_overlap_origin(x_coordinate: int, size: int) -> bool:
+    """
+    Checks if the x coordinate of the obstacle will overlap with the origin
+    point
+    :param int x_coordinate: x coordinate
+    :param int size: Size of the obstacle
+    :return: Boolean value
+    """
+    return x_coordinate in range(-size, 1)
+
+
+def check_y_coordinate_overlap_origin(y_coordinate: int, size: int) -> bool:
+    """
+    Checks if the y coordinate of the obstacle will overlap with the origin
+    point
+    :param int y_coordinate: y coordinate
+    :param int size: Size of the obstacle
+    :return: Boolean value
+    """
+    return y_coordinate in range(-size, 1)
+
+
 def get_random_x_coordinate(llx: int, urx: int, size: int) -> int:
     """
     Returns a random x coordinate based on the area limit and the size of the
@@ -109,10 +152,7 @@ def get_random_x_coordinate(llx: int, urx: int, size: int) -> int:
     :param int size: Size of the obstacle
     :return: Random x coordinate
     """
-    random_x = random.randint(llx, urx - size)
-    while random_x in range(-1 - size, 1):
-        random_x = random.randint(llx, urx - size)
-    return random_x
+    return random.randint(llx, urx - size)
 
 
 def get_random_y_coordinate(lly: int, ury: int, size: int) -> int:
@@ -124,10 +164,7 @@ def get_random_y_coordinate(lly: int, ury: int, size: int) -> int:
     :param int size: Size of the obstacle
     :return: Random x coordinate
     """
-    random_y = random.randint(lly, ury - size)
-    while random_y in range(-1 - size, 1):
-        random_y = random.randint(lly, ury - size)
-    return random_y
+    return random.randint(lly, ury - size)
 
 
 def is_position_blocked(x: int, y: int) -> bool:

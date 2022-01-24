@@ -118,7 +118,7 @@ def draw_obstacles() -> None:
     :return: None
     """
     obstacles.create_square_obstacle(min_x, min_y, max_x, max_y, size=40,
-                                     amount=50)
+                                     amount=100)
     pen = turtle.Turtle()
     pen.hideturtle()
     pen.speed('fastest')
