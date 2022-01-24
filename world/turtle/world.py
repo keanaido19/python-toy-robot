@@ -117,16 +117,16 @@ def draw_obstacles() -> None:
     Draws obstacles on turtle screen
     :return: None
     """
-    obstacles.create_square_obstacle(min_x, min_y, max_x, max_y, size=40,
-                                     amount=100)
-    pen = turtle.Turtle()
+    obstacles.create_square_obstacle(min_x, min_y, max_x, max_y, size=40)
+    pen = turtle.Turtle(shape='square')
+    pen.turtlesize(0.01)
     pen.hideturtle()
     pen.speed('fastest')
     for obstacle in obstacles.obstacles:
         pen.penup()
         for position in obstacle:
             pen.goto(*position)
-            pen.pendown()
+            pen.stamp()
 
 
 create_turtle_screen()
