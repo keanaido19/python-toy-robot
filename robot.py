@@ -1,6 +1,3 @@
-"""
-TODO: You can either work from this skeleton, or you can build on your solution for Toy Robot 3 exercise.
-"""
 import sys
 
 # list of valid command names
