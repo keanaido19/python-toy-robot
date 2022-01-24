@@ -79,7 +79,7 @@ def check_object(steps):
                 obstacles.is_position_blocked(new_x, new_y)])
 
 
-obstacles.create_square_obstacle()
+obstacles.create_square_obstacle(min_x, min_y, max_x, max_y)
 if obstacles.obstacles:
     print('There are some obstacles:')
     for obstacle in obstacles.obstacles:

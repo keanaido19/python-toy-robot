@@ -117,9 +117,9 @@ def draw_obstacles() -> None:
     Draws obstacles on turtle screen
     :return: None
     """
-    obstacles.create_square_obstacle()
+    obstacles.create_square_obstacle(min_x, min_y, max_x, max_y, size=40,
+                                     amount=50)
     pen = turtle.Turtle()
-    pen.fillcolor('red')
     pen.hideturtle()
     pen.speed('fastest')
     for obstacle in obstacles.obstacles:
