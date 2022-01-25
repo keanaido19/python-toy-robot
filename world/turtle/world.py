@@ -207,7 +207,7 @@ def setup_turtle_easy_maze(robot_name: str) -> None:
     :return: None
     """
     import maze.easy_maze as imported_maze
-    print(f'{robot_name}: Loaded simple_maze.')
+    print(f'{robot_name}: Loaded easy_maze.')
     turtle.Screen().tracer(0)
     create_robot_world()
     create_maze(imported_maze)
@@ -222,7 +222,7 @@ def setup_turtle_medium_maze(robot_name: str) -> None:
     :return: None
     """
     import maze.medium_maze as imported_maze
-    print(f'{robot_name}: Loaded simple_maze.')
+    print(f'{robot_name}: Loaded medium_maze.')
     turtle.Screen().tracer(0)
     create_robot_world()
     create_maze(imported_maze)
