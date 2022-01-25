@@ -100,19 +100,21 @@ def print_square_obstacles() -> None:
               f' (to {max_position[0]},{max_position[1]})')
 
 
-def setup_text_world() -> None:
+def setup_text_world(robot_name: str) -> None:
     """
     Creates the standard text world for the robot
+    :param str robot_name: Name of the robot
     :return: None
     """
+    print(f'{robot_name}: Loaded obstacles.')
     generate_obstacles()
     print_square_obstacles()
 
 
-def setup_world(commandline_argument: list[str]) -> None:
+def setup_world(commandline_argument: list[str], robot_name: str) -> None:
     if len(commandline_argument) == 2:
         print(commandline_argument)
     else:
-        setup_text_world()
+        setup_text_world(robot_name)
 
 

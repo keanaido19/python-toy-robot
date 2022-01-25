@@ -3,7 +3,7 @@ from maze import obstacles
 
 def generate_maze() -> None:
     maze = []
-    with open('simple_maze.txt', 'r') as file:
+    with open('extreme_maze.txt', 'r') as file:
         for line in file.readlines():
             x, y = map(int, line.strip().split(','))
             maze.append((x, y))

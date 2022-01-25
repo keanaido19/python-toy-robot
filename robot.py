@@ -19,18 +19,19 @@ def get_commandline_argument() -> list[str]:
     return (' '.join(argv).upper().strip()).split(' ')
 
 
-def import_world(commandline_argument: list[str]):
+def import_world(commandline_argument: list[str], robot_name: str):
     """
     imports and returns the correct world based on the commandline argument
     from the user
     :param list[str] commandline_argument: Commandline argument
+    :param str robot_name: Name of the robot
     :return: World module
     """
     if commandline_argument[0] == 'TURTLE':
         import world.turtle.world as imported_world
     else:
         import world.text.world as imported_world
-    imported_world.setup_world(commandline_argument)
+    imported_world.setup_world(commandline_argument, robot_name)
     return imported_world
 
 
@@ -309,7 +310,7 @@ def robot_start():
     robot_name = get_robot_name()
     output(robot_name, "Hello kiddo!")
 
-    world = import_world(get_commandline_argument())
+    world = import_world(get_commandline_argument(), robot_name)
 
     world.position_x = 0
     world.position_y = 0

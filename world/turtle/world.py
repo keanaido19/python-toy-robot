@@ -145,7 +145,17 @@ def create_random_obstacles() -> None:
     Creates random obstacles for the world
     :return: None
     """
-    obstacles.create_square_obstacle(min_x, min_y, max_x, max_y, amount=100)
+    obstacles.create_square_obstacle(min_x, min_y, max_x, max_y)
+    draw_obstacles()
+
+
+def create_maze(imported_maze) -> None:
+    """
+    Creates a maze based on the imported maze
+    :param imported_maze: Maze module
+    :return: None
+    """
+    imported_maze.generate_maze()
     draw_obstacles()
 
 
@@ -173,10 +183,42 @@ def setup_turtle_world() -> None:
     turtle.Screen().tracer(1)
 
 
-def setup_world(commandline_argument: list[str]) -> None:
-    if len(commandline_argument) == 2 and commandline_argument[1] == \
-            'SIMPLE_MAZE':
-        print(commandline_argument)
+def setup_turtle_simple_maze(robot_name: str) -> None:
+    """
+    Creates the simple_maze turtle world for the robot
+    :param str robot_name: Name of the robot
+    :return: None
+    """
+    import maze.simple_maze as imported_maze
+    print(f'{robot_name}: Loaded simple_maze.')
+    turtle.Screen().tracer(0)
+    create_robot_world()
+    create_maze(imported_maze)
+    create_robot()
+    turtle.Screen().tracer(1)
+
+
+def setup_turtle_extreme_maze(robot_name: str) -> None:
+    """
+    Creates the extreme_maze turtle world for the robot
+    :param str robot_name: Name of the robot
+    :return: None
+    """
+    import maze.extreme_maze as imported_maze
+    print(f'{robot_name}: Loaded extreme_maze.')
+    turtle.Screen().tracer(0)
+    create_robot_world()
+    create_maze(imported_maze)
+    create_robot()
+    turtle.Screen().tracer(1)
+
+
+def setup_world(commandline_argument: list[str], robot_name: str) -> None:
+    if len(commandline_argument) == 2:
+        if commandline_argument[1] == 'SIMPLE_MAZE':
+            setup_turtle_simple_maze(robot_name)
+        elif commandline_argument[1] == 'EXTREME_MAZE':
+            setup_turtle_extreme_maze(robot_name)
     else:
         setup_turtle_world()
 
