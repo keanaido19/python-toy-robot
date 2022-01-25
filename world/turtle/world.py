@@ -11,6 +11,9 @@ current_direction_index = 0
 min_y, max_y = -200, 200
 min_x, max_x = -100, 100
 
+#
+robot: turtle.Turtle
+
 
 def show_position(robot_name) -> None:
     """
@@ -117,7 +120,6 @@ def draw_obstacles() -> None:
     Draws obstacles on turtle screen
     :return: None
     """
-    obstacles.create_square_obstacle(min_x, min_y, max_x, max_y, size=40)
     pen = turtle.Turtle(shape='square')
     pen.turtlesize(0.01)
     pen.hideturtle()
@@ -129,13 +131,54 @@ def draw_obstacles() -> None:
             pen.stamp()
 
 
-create_turtle_screen()
-draw_world_boundary()
-draw_obstacles()
-robot = turtle.Turtle()
-robot.penup()
-robot.speed('fastest')
-robot.setheading(90)
+def create_robot_world() -> None:
+    """
+    Creates the robot world, this includes the turtle screen and the world limit
+    :return: None
+    """
+    create_turtle_screen()
+    draw_world_boundary()
+
+
+def create_random_obstacles() -> None:
+    """
+    Creates random obstacles for the world
+    :return: None
+    """
+    obstacles.create_square_obstacle(min_x, min_y, max_x, max_y, amount=100)
+    draw_obstacles()
+
+
+def create_robot() -> None:
+    """
+    Creates a turtle object for the robot to manipulate
+    :return: None
+    """
+    global robot
+    robot = turtle.Turtle()
+    robot.penup()
+    robot.speed('fastest')
+    robot.setheading(90)
+
+
+def setup_turtle_world() -> None:
+    """
+    Creates the standard turtle world for the robot
+    :return: None
+    """
+    turtle.Screen().tracer(0)
+    create_robot_world()
+    create_random_obstacles()
+    create_robot()
+    turtle.Screen().tracer(1)
+
+
+def setup_world(commandline_argument: list[str]) -> None:
+    if len(commandline_argument) == 2 and commandline_argument[1] == \
+            'SIMPLE_MAZE':
+        print(commandline_argument)
+    else:
+        setup_turtle_world()
 
 
 

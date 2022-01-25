@@ -2,6 +2,8 @@ import random
 
 obstacles: list[tuple[tuple[int, int]]] = []
 
+maze = []
+
 
 def create_square_obstacle(
         llx: int,
@@ -169,18 +171,12 @@ def get_random_y_coordinate(lly: int, ury: int, size: int) -> int:
 
 def is_position_blocked(x: int, y: int) -> bool:
     """
-    Returns True if position (x,y) falls inside an obstacle.
+    Returns True if position (x,y) falls on an obstacle
     :param int x: x Coordinate
     :param int y: y Coordinate
     :return: Boolean value
     """
-    boolean_values = []
-    for obstacle in obstacles:
-        min_coordinate = obstacle[0]
-        max_coordinate = obstacle[-1]
-        in_x = x in range(min_coordinate[0], max_coordinate[0] + 1)
-        in_y = y in range(min_coordinate[1], max_coordinate[1] + 1)
-        boolean_values.append(in_x and in_y)
+    boolean_values = [(x, y) in obstacle for obstacle in obstacles]
     return any(boolean_values)
 
 

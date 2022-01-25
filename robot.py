@@ -10,26 +10,27 @@ history = []
 world = None
 
 
-def get_commandline_argument() -> str:
+def get_commandline_argument() -> list[str]:
     """
     Returns argument from the commandline.
     :return: Commandline argument
     """
     argv = sys.argv[1:]
-    return ' '.join(argv).upper().strip()
+    return (' '.join(argv).upper().strip()).split(' ')
 
 
-def import_world(commandline_argument: str):
+def import_world(commandline_argument: list[str]):
     """
     imports and returns the correct world based on the commandline argument
     from the user
-    :param str commandline_argument: Commandline argument
-    :return:
+    :param list[str] commandline_argument: Commandline argument
+    :return: World module
     """
-    if commandline_argument == 'TURTLE':
+    if commandline_argument[0] == 'TURTLE':
         import world.turtle.world as imported_world
     else:
         import world.text.world as imported_world
+    imported_world.setup_world(commandline_argument)
     return imported_world
 
 

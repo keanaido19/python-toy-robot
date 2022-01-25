@@ -79,11 +79,40 @@ def check_object(steps):
                 obstacles.is_position_blocked(new_x, new_y)])
 
 
-obstacles.create_square_obstacle(min_x, min_y, max_x, max_y)
-if obstacles.obstacles:
+def generate_obstacles() -> None:
+    """
+    Generates random square obstacles
+    :return: None
+    """
+    obstacles.create_square_obstacle(min_x, min_y, max_x, max_y)
+
+
+def print_square_obstacles() -> None:
+    """
+    Prints out the position of the square obstacles
+    :return: None
+    """
     print('There are some obstacles:')
     for obstacle in obstacles.obstacles:
         min_position = obstacle[0]
         max_position = obstacle[-1]
         print(f'- At position {min_position[0]},{min_position[1]}'
               f' (to {max_position[0]},{max_position[1]})')
+
+
+def setup_text_world() -> None:
+    """
+    Creates the standard text world for the robot
+    :return: None
+    """
+    generate_obstacles()
+    print_square_obstacles()
+
+
+def setup_world(commandline_argument: list[str]) -> None:
+    if len(commandline_argument) == 2:
+        print(commandline_argument)
+    else:
+        setup_text_world()
+
+
