@@ -1,9 +1,12 @@
+import os
+
 from maze import obstacles
 
 
 def generate_maze() -> None:
     maze = []
-    with open('medium_maze.txt', 'r') as file:
+    path = os.path.join(os.path.dirname(__file__))
+    with open(f'{path}/medium_maze.txt', 'r') as file:
         for line in file.readlines():
             x, y = map(int, line.strip().split(','))
             maze.append((x, y))
