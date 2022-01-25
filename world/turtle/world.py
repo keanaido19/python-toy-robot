@@ -171,11 +171,13 @@ def create_robot() -> None:
     robot.setheading(90)
 
 
-def setup_turtle_world() -> None:
+def setup_turtle_world(robot_name: str) -> None:
     """
     Creates the standard turtle world for the robot
+    :param str robot_name: Name of the robot
     :return: None
     """
+    print(f'{robot_name}: Loaded obstacles.')
     turtle.Screen().tracer(0)
     create_robot_world()
     create_random_obstacles()
@@ -190,6 +192,36 @@ def setup_turtle_simple_maze(robot_name: str) -> None:
     :return: None
     """
     import maze.simple_maze as imported_maze
+    print(f'{robot_name}: Loaded simple_maze.')
+    turtle.Screen().tracer(0)
+    create_robot_world()
+    create_maze(imported_maze)
+    create_robot()
+    turtle.Screen().tracer(1)
+
+
+def setup_turtle_easy_maze(robot_name: str) -> None:
+    """
+    Creates the easy_maze turtle world for the robot
+    :param str robot_name: Name of the robot
+    :return: None
+    """
+    import maze.easy_maze as imported_maze
+    print(f'{robot_name}: Loaded simple_maze.')
+    turtle.Screen().tracer(0)
+    create_robot_world()
+    create_maze(imported_maze)
+    create_robot()
+    turtle.Screen().tracer(1)
+
+
+def setup_turtle_medium_maze(robot_name: str) -> None:
+    """
+    Creates the medium_maze turtle world for the robot
+    :param str robot_name: Name of the robot
+    :return: None
+    """
+    import maze.medium_maze as imported_maze
     print(f'{robot_name}: Loaded simple_maze.')
     turtle.Screen().tracer(0)
     create_robot_world()
@@ -214,13 +246,20 @@ def setup_turtle_extreme_maze(robot_name: str) -> None:
 
 
 def setup_world(commandline_argument: list[str], robot_name: str) -> None:
-    if len(commandline_argument) == 2:
-        if commandline_argument[1] == 'SIMPLE_MAZE':
-            setup_turtle_simple_maze(robot_name)
-        elif commandline_argument[1] == 'EXTREME_MAZE':
-            setup_turtle_extreme_maze(robot_name)
+    if len(commandline_argument) == 2 and commandline_argument[1] == \
+            'SIMPLE_MAZE':
+        setup_turtle_simple_maze(robot_name)
+    elif len(commandline_argument) == 2 and commandline_argument[1] == \
+            'EASY_MAZE':
+        setup_turtle_easy_maze(robot_name)
+    elif len(commandline_argument) == 2 and commandline_argument[1] == \
+            'MEDIUM_MAZE':
+        setup_turtle_medium_maze(robot_name)
+    elif len(commandline_argument) == 2 and commandline_argument[1] == \
+            'EXTREME_MAZE':
+        setup_turtle_extreme_maze(robot_name)
     else:
-        setup_turtle_world()
+        setup_turtle_world(robot_name)
 
 
 
