@@ -166,7 +166,7 @@ def create_robot() -> None:
     """
     global robot
     robot = turtle.Turtle()
-    robot.pencolor('white')
+    robot.color('blue')
     robot.penup()
     robot.speed('fastest')
     robot.setheading(90)
@@ -247,6 +247,12 @@ def setup_turtle_extreme_maze(robot_name: str) -> None:
 
 
 def setup_world(commandline_argument: list[str], robot_name: str) -> None:
+    """
+    Imports the correct modules for the robot world
+    :param list[str] commandline_argument: Commandline arguments
+    :param str robot_name: Name of the robot
+    :return: None
+    """
     if len(commandline_argument) == 2 and commandline_argument[1] == \
             'SIMPLE_MAZE':
         setup_turtle_simple_maze(robot_name)

@@ -13,6 +13,12 @@ def create_square_obstacle(
 ) -> None:
     """
     Creates a square obstacle by storing coordinate points for the perimeter
+    :param int llx: Lower left x coordinate
+    :param int lly: Upper x coordinate
+    :param int urx: Lower left y coordinate
+    :param int ury: Upper y coordinate
+    :param int size: Size of the obstacle
+    :param int amount: Amount of square obstacles that can be created
     :return: None
     """
     global obstacles

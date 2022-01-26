@@ -200,9 +200,12 @@ class PriorityQueue:
         return repr(self._container)
 
 
-def astar(start: tuple[int, int], check_completed: Callable[[T], bool],
-          adjacent_coordinates: Callable[[T], list[tuple[int, int]]],
-          distance: Callable[[T], int]) -> Optional[list[tuple[int, int]]]:
+def astar(start: tuple[int, int],
+          check_completed: Callable[[tuple[int, int]], bool],
+          adjacent_coordinates: Callable[[tuple[int, int]], list[tuple[int,
+                                                                       int]]],
+          distance: Callable[[tuple[int, int]], int]
+          ) -> Optional[list[tuple[int, int]]]:
     """
     Astar algorithm that solves a maze by checking adjacent coordinates and
     moving to them provided they have not already been explored-however astar
@@ -238,8 +241,14 @@ def astar(start: tuple[int, int], check_completed: Callable[[T], bool],
     return None
 
 
-def path_to_robot_commands(path: list[tuple[int, int]], robot_direction: int) \
-        -> list[str]:
+def path_to_robot_commands(path: list[tuple[int, int]],
+                           robot_direction: int) -> list[str]:
+    """
+    Converts a path of coordinates into commands that the robot can execute
+    :param list[tuple[int, int]] path: Path of coordinates
+    :param int robot_direction: Direction index of the robot
+    :return: List of robot commands
+    """
     robot_commands: list[str] = []
     for i in range(len(path) - 1):
         current_position: tuple[int, int] = path[i]
@@ -301,8 +310,46 @@ def path_to_robot_commands(path: list[tuple[int, int]], robot_direction: int) \
     return robot_commands
 
 
+def simplify_robot_commands(robot_commands: list[str]) -> list[str]:
+    """
+    Returns a list of simplified robot commands
+    :param robot_commands: List of robot commands
+    :return: A list of simplified robot commands
+    """
+    robot_commands.append('end')
+    simplified_robot_command_list: list[str] = []
+    for i, _ in enumerate(robot_commands):
+        if robot_commands[i] == 'forward 1':
+            c = i
+            while robot_commands[i] == 'forward 1':
+                robot_commands.pop(i)
+                c += 1
+            simplified_robot_command_list.append(f'forward {c - i}')
+        if robot_commands[i] == 'back 1':
+            c = i
+            while robot_commands[i] == 'back 1':
+                robot_commands.pop(i)
+                c += 1
+            simplified_robot_command_list.append(f'back {c - i}')
+        if robot_commands[i] in ['left', 'right']:
+            simplified_robot_command_list.append(robot_commands[i])
+    return simplified_robot_command_list
+
+
 def maze_run(start_x: int, start_y: int, start_direction: int,
-             llx, lly, urx, ury, goal: str):
+             llx, lly, urx, ury, goal: str) -> list[str]:
+    """
+    Handler for the maze solving algorithm
+    :param int start_x: Starting x position
+    :param int start_y: Starting y position
+    :param int start_direction: Starting direction index
+    :param int llx: Lower left x coordinate
+    :param int lly: Upper x coordinate
+    :param int urx: Lower left y coordinate
+    :param int ury: Upper y coordinate
+    :param str goal: Maze edge we with to arrive at
+    :return: List of robot commands
+    """
     global top_edge, bottom_edge, right_edge, left_edge
     top_edge = ury
     bottom_edge = lly
@@ -330,4 +377,5 @@ def maze_run(start_x: int, start_y: int, start_direction: int,
             (start_x, start_y), check_left_edge,
             get_adjacent_coordinates, get_distance_left_edge
         )
-    return path_to_robot_commands(path, start_direction)
+    robot_commands = path_to_robot_commands(path, start_direction)
+    return simplify_robot_commands(robot_commands)
