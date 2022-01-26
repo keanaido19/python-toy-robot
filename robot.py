@@ -1,7 +1,11 @@
 import sys
+import time
+
+from maze import maze_solver
 
 # list of valid command names
-valid_commands = ['off', 'help', 'replay', 'forward', 'back', 'right', 'left', 'sprint']
+valid_commands = ['off', 'help', 'replay', 'forward', 'back', 'right',
+                  'left', 'sprint', 'mazerun']
 move_commands = valid_commands[3:]
 
 # commands history
@@ -101,8 +105,14 @@ def valid_command(command):
             else:
                 range_args = range_args.split('-')
                 return is_int(range_args[0]) and is_int(range_args[1]) and len(range_args) == 2
+    elif command_name.lower() == 'mazerun':
+        if len(arg1.strip()) == 0:
+            return True
+        elif arg1.strip().lower() in ['top', 'bottom', 'right', 'left']:
+            return True
     else:
         return command_name.lower() in valid_commands and (len(arg1) == 0 or is_int(arg1))
+
 
 
 def output(name, message):
@@ -253,6 +263,25 @@ def do_replay(robot_name, arguments):
     return True, ' > '+robot_name+' replayed ' + str(len(commands_to_replay)) + ' commands' + (' in reverse' if reverse else '') + (' silently.' if silent else '.')
 
 
+def do_maze_run(robot_name: str, goal: str):
+    if goal == '':
+        goal = 'top'
+    print(f' > {robot_name} starting maze run..')
+    robot_commands = maze_solver.maze_run(
+        world.position_x,
+        world.position_y,
+        world.current_direction_index,
+        world.min_x,
+        world.min_y,
+        world.max_x,
+        world.max_y,
+        goal
+    )
+    for command in robot_commands:
+        handle_command(robot_name, command)
+    return True, f'{robot_name}: I am at the {goal} edge.'
+
+
 def call_command(command_name, command_arg, robot_name):
     if command_name == 'help':
         return do_help()
@@ -268,6 +297,8 @@ def call_command(command_name, command_arg, robot_name):
         return do_sprint(robot_name, int(command_arg))
     elif command_name == 'replay':
         return do_replay(robot_name, command_arg)
+    elif command_name == 'mazerun':
+        return do_maze_run(robot_name, command_arg)
     return False, None
 
 

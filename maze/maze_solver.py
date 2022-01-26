@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TypeVar, Callable, Generic, Optional
+from typing import TypeVar, Callable, Optional
 from maze import obstacles
 from heapq import heappush, heappop
 
@@ -75,7 +75,7 @@ def check_right_edge(coordinate: tuple[int, int]) -> bool:
     :return: Boolean value
     """
     global right_edge
-    return coordinate[1] >= right_edge - 1
+    return coordinate[0] >= right_edge - 1
 
 
 def check_left_edge(coordinate: tuple[int, int]) -> bool:
@@ -85,7 +85,7 @@ def check_left_edge(coordinate: tuple[int, int]) -> bool:
     :return: Boolean value
     """
     global left_edge
-    return coordinate[1] <= left_edge + 1
+    return coordinate[0] <= left_edge + 1
 
 
 def get_distance_top_edge(coordinate: tuple[int, int]) -> int:
@@ -153,7 +153,12 @@ class Node:
             < (other.distance_from_start + other.distance_to_goal)
 
 
-def node_to_path(node: Node) -> list[T]:
+def node_to_path(node: Node) -> list[tuple[int, int]]:
+    """
+    Converts the Node to a path of coordinates based on its parent node
+    :param node: Node object
+    :return: List of coordinates
+    """
     path = [node.position]
     while node.parent is not None:
         node = node.parent
@@ -169,7 +174,7 @@ class PriorityQueue:
     """
     def __init__(self) -> None:
         """Constructor for the PriorityQueue"""
-        self._container: list[T] = []
+        self._container: list[Node] = []
 
     @property
     def empty(self) -> bool:
@@ -196,7 +201,7 @@ class PriorityQueue:
 
 
 def astar(start: tuple[int, int], check_completed: Callable[[T], bool],
-          adjacent_coordinates: Callable[[T], list[T]],
+          adjacent_coordinates: Callable[[T], list[tuple[int, int]]],
           distance: Callable[[T], int]) -> Optional[list[tuple[int, int]]]:
     """
     Astar algorithm that solves a maze by checking adjacent coordinates and
@@ -233,21 +238,77 @@ def astar(start: tuple[int, int], check_completed: Callable[[T], bool],
     return None
 
 
-from maze import medium_maze
+def path_to_robot_commands(path: list[tuple[int, int]], robot_direction: int) \
+        -> list[str]:
+    robot_commands: list[str] = []
+    for i in range(len(path) - 1):
+        current_position: tuple[int, int] = path[i]
+        next_position: tuple[int, int] = path[i + 1]
+        if current_position[0] == next_position[0]:
+            if current_position[1] > next_position[1]:
+                if robot_direction == 0:
+                    robot_commands.append('back 1')
+                elif robot_direction == 1:
+                    robot_commands.append('right')
+                    robot_commands.append('forward 1')
+                    robot_direction = 2
+                elif robot_direction == 3:
+                    robot_commands.append('left')
+                    robot_commands.append('forward 1')
+                    robot_direction = 2
+                else:
+                    robot_commands.append('forward 1')
+            else:
+                if robot_direction == 0:
+                    robot_commands.append('forward 1')
+                elif robot_direction == 1:
+                    robot_commands.append('left')
+                    robot_commands.append('forward 1')
+                    robot_direction = 0
+                elif robot_direction == 3:
+                    robot_commands.append('right')
+                    robot_commands.append('forward 1')
+                    robot_direction = 0
+                else:
+                    robot_commands.append('back 1')
+        else:
+            if current_position[0] < next_position[0]:
+                if robot_direction == 0:
+                    robot_commands.append('right')
+                    robot_commands.append('forward 1')
+                    robot_direction = 1
+                elif robot_direction == 1:
+                    robot_commands.append('forward 1')
+                elif robot_direction == 3:
+                    robot_commands.append('back 1')
+                else:
+                    robot_commands.append('left')
+                    robot_commands.append('forward 1')
+                    robot_direction = 1
+            else:
+                if robot_direction == 0:
+                    robot_commands.append('left')
+                    robot_commands.append('forward 1')
+                    robot_direction = 3
+                elif robot_direction == 1:
+                    robot_commands.append('back 1')
+                elif robot_direction == 3:
+                    robot_commands.append('forward 1')
+                else:
+                    robot_commands.append('right')
+                    robot_commands.append('forward 1')
+                    robot_direction = 3
+    return robot_commands
 
 
-medium_maze.generate_maze()
-get_obstacle_coordinates()
-bottom_edge, top_edge = -200, 200
-left_edge, right_edge = -100, 100
-
-
-def maze_run(start_x: int, start_y: int, llx, lly, urx, ury, goal: str = 'top'):
+def maze_run(start_x: int, start_y: int, start_direction: int,
+             llx, lly, urx, ury, goal: str):
     global top_edge, bottom_edge, right_edge, left_edge
     top_edge = ury
     bottom_edge = lly
     right_edge = urx
     left_edge = llx
+    path: list[tuple[int, int]] = []
     get_obstacle_coordinates()
     if goal == 'top':
         path = astar(
@@ -269,3 +330,4 @@ def maze_run(start_x: int, start_y: int, llx, lly, urx, ury, goal: str = 'top'):
             (start_x, start_y), check_left_edge,
             get_adjacent_coordinates, get_distance_left_edge
         )
+    return path_to_robot_commands(path, start_direction)
