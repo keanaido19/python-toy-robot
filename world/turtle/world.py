@@ -178,11 +178,12 @@ def setup_turtle_world(robot_name: str) -> None:
     :param str robot_name: Name of the robot
     :return: None
     """
-    print(f'{robot_name}: Loaded obstacles.')
     turtle.Screen().tracer(0)
     create_robot_world()
-    create_random_obstacles()
     create_robot()
+    create_random_obstacles()
+    if obstacles.obstacles:
+        print(f'{robot_name}: Loaded obstacles.')
     turtle.Screen().tracer(1)
 
 

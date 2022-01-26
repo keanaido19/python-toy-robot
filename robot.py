@@ -133,6 +133,8 @@ RIGHT - turn right by 90 degrees
 LEFT - turn left by 90 degrees
 SPRINT - sprint forward according to a formula
 REPLAY - replays all movement commands from history [FORWARD, BACK, RIGHT, LEFT, SPRINT]
+MAZERUN - solves a maze by moving the the robot to an edge of the maze, 
+          e.g. 'MAZERUN TOP', 'MAZERUN RIGHT', 'MAZERUN LEFT', 'MAZERUN BOTTOM'
 """
 
 

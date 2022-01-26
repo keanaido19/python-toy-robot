@@ -143,9 +143,10 @@ def setup_text_world(robot_name: str) -> None:
     :param str robot_name: Name of the robot
     :return: None
     """
-    print(f'{robot_name}: Loaded obstacles.')
     generate_obstacles()
-    print_square_obstacles()
+    if obstacles.obstacles:
+        print(f'{robot_name}: Loaded obstacles.')
+        print_square_obstacles()
 
 
 def setup_text_simple_maze(robot_name: str) -> None:
@@ -224,7 +225,7 @@ def setup_world(commandline_argument: list[str], robot_name: str) -> None:
             setup_text_extreme_maze(robot_name)
         elif commandline_argument[0] == 'TEXT':
             setup_text_world(robot_name)
-    else:
-        setup_text_world(robot_name)
+        else:
+            setup_text_world(robot_name)
 
 
