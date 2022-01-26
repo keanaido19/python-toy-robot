@@ -227,5 +227,5 @@ def setup_world(commandline_argument: list[str], robot_name: str) -> None:
             setup_text_world(robot_name)
         else:
             setup_text_world(robot_name)
-
-
+    else:
+        setup_text_world(robot_name)
