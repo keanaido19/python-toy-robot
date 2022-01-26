@@ -4,9 +4,9 @@ import time
 from maze import maze_solver
 
 # list of valid command names
-valid_commands = ['off', 'help', 'replay', 'forward', 'back', 'right',
-                  'left', 'sprint', 'mazerun']
-move_commands = valid_commands[3:]
+valid_commands = ['off', 'help', 'replay', 'mazerun', 'forward', 'back',
+                  'right', 'left', 'sprint']
+move_commands = valid_commands[4:]
 
 # commands history
 history = []
