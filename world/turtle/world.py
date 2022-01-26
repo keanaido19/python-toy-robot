@@ -166,7 +166,7 @@ def create_robot() -> None:
     """
     global robot
     robot = turtle.Turtle()
-    robot.color('blue')
+    robot.color('Orchid')
     robot.penup()
     robot.speed('fastest')
     robot.setheading(90)
